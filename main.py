@@ -41,6 +41,10 @@ parser.add_argument("--factor_num",
 	type=int,
 	default=8, 
 	help="predictive factors numbers in the model")
+parser.add_argument("--num_layers", 
+	type=int,
+	default=3, 
+	help="number of layers in MLP model")
 parser.add_argument("--num_ng", 
 	type=int,
 	default=4, 
@@ -68,11 +72,11 @@ train_data, test_data, user_num ,item_num, train_mat = data_utils.load_all()
 
 # construct the train and test datasets
 train_dataset = data_utils.NCFData(
-		train_data, item_num, train_mat, True)
+		train_data, item_num, train_mat, args.num_ng, True)
 test_dataset = data_utils.NCFData(
-		test_data, item_num, train_mat, False)
+		test_data, item_num, train_mat, 0, False)
 train_loader = data.DataLoader(train_dataset,
-		batch_size=args.batch_size, shuffle=True, num_workers=0)
+		batch_size=args.batch_size, shuffle=True, num_workers=4)
 test_loader = data.DataLoader(test_dataset,
 		batch_size=args.test_num_ng+1, shuffle=False, num_workers=0)
 
@@ -86,10 +90,10 @@ else:
 	GMF_model = None
 	MLP_model = None
 
-model = model.NCF(user_num, item_num, args.factor_num, 
-		args.dropout, config.model, GMF_model, MLP_model)
+model = model.NCF(user_num, item_num, args.factor_num, args.num_layers, 
+						args.dropout, config.model, GMF_model, MLP_model)
 model.cuda()
-loss_function = nn.BCELoss()
+loss_function = nn.BCEWithLogitsLoss()
 
 if config.model == 'NeuMF-pre':
 	optimizer = optim.SGD(model.parameters(), lr=args.lr)
@@ -103,8 +107,7 @@ count = 0
 for epoch in range(args.epochs):
 	model.train() # Enable dropout (if have).
 	start_time = time.time()
-	train_loader.dataset.ng_sample(args.num_ng)
-	print("Negative sampling for epoch {:03d} is done.".format(epoch))
+	train_loader.dataset.ng_sample()
 
 	for user, item, label in train_loader:
 		user = user.cuda()

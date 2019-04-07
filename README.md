@@ -3,7 +3,18 @@ A pytorch GPU implementation of He et al. "Neural Collaborative Filtering" at WW
 
 Note that we use the two sub datasets provided by Xiangnan's [repo](https://github.com/hexiangnan/neural_collaborative_filtering/tree/master/Data).
 
-There is one thing weird about this implementation. As I totally mimiced all the settings in He's repo, but the final performance is not the smae as reported in the original papers. That the Hit Ratio is approaching 1.0 but the NDCG is pretty low! And the performance is not too sensitive with the increasing of number of factors. I'll correct this in futher commits, just leave it here.
+We utilized a factor number **32**, MLP layers **3**, and posted the results in the original paper and this implementation here.
+He's keras [repo](https://github.com/hexiangnan/neural_collaborative_filtering):
+Models | MovieLens | Pinterest
+------ | --------- | ---------
+       | HR@10 | NDCG@10 | HR@10 | NDCG@10
+MLP    | 0.692 | 0.425   | 0.868 | 0.542
+GMF    |   -   |   -     |   -   |   -
+NeuMF (without pre-training) | 0.701 | 0.425 | 0.870 | 0.549
+NeuMF (with pre-training)	 | 0.726 | 0.445 | 0.879 | 0.555
+
+This pytorch code:
+
 
 ## The requirements are as follows:
 * python==3.6

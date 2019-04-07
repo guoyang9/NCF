@@ -39,7 +39,7 @@ def load_all(test_num=100):
 
 class NCFData(data.Dataset):
 	def __init__(self, features, 
-				num_item=None, train_mat=None, is_training=None):
+				num_item, train_mat=None, num_ng=0, is_training=None):
 		super(NCFData, self).__init__()
 		""" Note that the labels are only useful when training, we thus 
 			add them in the ng_sample() function.
@@ -47,16 +47,17 @@ class NCFData(data.Dataset):
 		self.features_ps = features
 		self.num_item = num_item
 		self.train_mat = train_mat
+		self.num_ng = num_ng
 		self.is_training = is_training
 		self.labels = [0 for _ in range(len(features))]
 
-	def ng_sample(self, num=4):
+	def ng_sample(self):
 		assert self.is_training, 'no need to sampling when testing'
 
 		self.features_ng = []
 		for x in self.features_ps:
 			u = x[0]
-			for t in range(num):
+			for t in range(self.num_ng):
 				j = np.random.randint(self.num_item)
 				while (u, j) in self.train_mat:
 					j = np.random.randint(self.num_item)
@@ -69,9 +70,7 @@ class NCFData(data.Dataset):
 		self.labels_fill = labels_ps + labels_ng
 
 	def __len__(self):
-		length = len(
-			self.labels) if self.is_training else len(self.features_ps)
-		return length
+		return (self.num_ng + 1) * len(self.labels)
 
 	def __getitem__(self, idx):
 		features = self.features_fill if self.is_training \

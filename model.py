@@ -4,8 +4,8 @@ import torch.nn.functional as F
 
 
 class NCF(nn.Module):
-	def __init__(self, user_num, item_num, factor_num, 
-			dropout, model, GMF_model=None, MLP_model=None):
+	def __init__(self, user_num, item_num, factor_num, num_layers,
+					dropout, model, GMF_model=None, MLP_model=None):
 		super(NCF, self).__init__()
 		"""
 		user_num: number of users;
@@ -26,17 +26,13 @@ class NCF(nn.Module):
 		self.embed_item_GMF = nn.Embedding(item_num, factor_num)
 		self.embed_item_MLP = nn.Embedding(item_num, factor_num*4)
 
-		self.MLP_layers = nn.Sequential(
-			nn.Linear(factor_num*8, factor_num*4),
-			nn.ReLU(),
-			nn.Dropout(p=self.dropout),
-			nn.Linear(factor_num*4, factor_num*2),
-			nn.ReLU(),
-			nn.Dropout(p=self.dropout),
-			nn.Linear(factor_num*2, factor_num),
-			nn.ReLU(),
-			nn.Dropout(p=self.dropout)
-		)
+		MLP_modules = []
+		for i in range(num_layers):
+			input_size = factor_num * (num_layers - i + 1)
+			MLP_modules.append(nn.Dropout(p=self.dropout))
+			MLP_modules.append(nn.Linear(input_size, input_size//2))
+			MLP_modules.append(nn.ReLU())
+		self.MLP_layers = nn.Sequential(*MLP_modules)
 
 		if self.model in ['MLP', 'GMF']:
 			predict_size = factor_num 
@@ -108,5 +104,5 @@ class NCF(nn.Module):
 		else:
 			concat = torch.cat((output_GMF, output_MLP), -1)
 
-		prediction = torch.sigmoid(self.predict_layer(concat))
+		prediction = self.predict_layer(concat)
 		return prediction.view(-1)
