@@ -3,6 +3,7 @@ A pytorch GPU implementation of He et al. "Neural Collaborative Filtering" at WW
 
 Note that we use the two sub datasets provided by Xiangnan's [repo](https://github.com/hexiangnan/neural_collaborative_filtering/tree/master/Data).
 
+There is one thing weird about this implementation. As I totally mimiced all the settings in He's repo, but the final performance is not the smae as reported in the original papers. That the Hit Ratio is approaching 1.0 but the NDCG is pretty low! And the performance is not too sensitive with the increasing of number of factors. I'll correct this in futher commits, just leave it here.
 
 ## The requirements are as follows:
 * python==3.6

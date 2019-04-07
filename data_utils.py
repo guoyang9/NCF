@@ -34,7 +34,6 @@ def load_all(test_num=100):
 			for i in arr[1:]:
 				test_data.append([u, int(i)])
 			line = fd.readline()
-
 	return train_data, test_data, user_num, item_num, train_mat
 
 

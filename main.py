@@ -72,7 +72,7 @@ train_dataset = data_utils.NCFData(
 test_dataset = data_utils.NCFData(
 		test_data, item_num, train_mat, False)
 train_loader = data.DataLoader(train_dataset,
-		batch_size=args.batch_size, shuffle=True, num_workers=4)
+		batch_size=args.batch_size, shuffle=True, num_workers=0)
 test_loader = data.DataLoader(test_dataset,
 		batch_size=args.test_num_ng+1, shuffle=False, num_workers=0)
 
@@ -114,7 +114,6 @@ for epoch in range(args.epochs):
 		model.zero_grad()
 		prediction = model(user, item)
 		loss = loss_function(prediction, label)
-		print(loss.item())
 		loss.backward()
 		optimizer.step()
 		# writer.add_scalar('data/loss', loss.item(), count)
