@@ -1,22 +1,23 @@
 # NCF
-A pytorch and tensorflow GPU implementation of He et al. "Neural Collaborative Filtering" at WWW'17
+A pytorch GPU implementation of He et al. "Neural Collaborative Filtering" at WWW'17
 
-This code only covers the Movielens 1M Dataset https://grouplens.org/datasets/movielens/. 
-
-Based on the paper's result, the improvement of with pre-train over without pre-train is not too significant, so this version is just the NCF with the intergration of GMF and MLP.
+Note that we use the two sub datasets provided by Xiangnan's [repo](https://github.com/hexiangnan/neural_collaborative_filtering/tree/master/Data).
 
 
 ## The requirements are as follows:
-1.python 3.5
+* python==3.6
 
-2.pytorch 0.4.0
+* pandas==0.24.2
 
-3.tensorboardX (mainly useful when you want to visulize the loss, https://github.com/lanpa/tensorboard-pytorch)
+* numpy==1.16.2
 
-4.tensorflow 1.7
+* pytorch==1.0.1
 
+* gensim==3.7.1
+
+* tensorboardX==1.6 (mainly useful when you want to visulize the loss, see https://github.com/lanpa/tensorboard-pytorch)
 
 ## Example to run:
 ```
-python main.py --batch_size=128 --lr=0.00001 --embed_size=16
+python main.py --batch_size=256 --lr=0.001 --embed_size=16
 ```
