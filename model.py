@@ -11,6 +11,7 @@ class NCF(nn.Module):
 		user_num: number of users;
 		item_num: number of items;
 		factor_num: number of predictive factors;
+		num_layers: the number of layers in MLP model;
 		dropout: dropout rate between fully connected layers;
 		model: 'MLP', 'GMF', 'NeuMF-end', and 'NeuMF-pre';
 		GMF_model: pre-trained GMF weights;
@@ -30,7 +31,7 @@ class NCF(nn.Module):
 
 		MLP_modules = []
 		for i in range(num_layers):
-			input_size = factor_num * (2 **(num_layers - i))
+			input_size = factor_num * (2 ** (num_layers - i))
 			MLP_modules.append(nn.Dropout(p=self.dropout))
 			MLP_modules.append(nn.Linear(input_size, input_size//2))
 			MLP_modules.append(nn.ReLU())
