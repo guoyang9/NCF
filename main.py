@@ -31,7 +31,7 @@ parser.add_argument("--batch_size",
 	help="batch size for training")
 parser.add_argument("--epochs", 
 	type=int,
-	default=100,  
+	default=20,  
 	help="training epoches")
 parser.add_argument("--top_k", 
 	type=int, 
@@ -39,7 +39,7 @@ parser.add_argument("--top_k",
 	help="compute metrics@top_k")
 parser.add_argument("--factor_num", 
 	type=int,
-	default=8, 
+	default=32, 
 	help="predictive factors numbers in the model")
 parser.add_argument("--num_layers", 
 	type=int,

@@ -1,19 +1,27 @@
 # NCF
-A pytorch GPU implementation of He et al. "Neural Collaborative Filtering" at WWW'17
+### A pytorch GPU implementation of He et al. "Neural Collaborative Filtering" at WWW'17
 
-Note that we use the two sub datasets provided by Xiangnan's [repo](https://github.com/hexiangnan/neural_collaborative_filtering/tree/master/Data).
+Note that I use the two sub datasets provided by Xiangnan's [repo](https://github.com/hexiangnan/neural_collaborative_filtering/tree/master/Data).
 
-We utilized a factor number **32**, MLP layers **3**, and posted the results in the original paper and this implementation here.
+I utilized a factor number **32**, MLP layers **3**, epochs is **20**, and posted the results in the original paper and this implementation here. There is one thing weird that the pre-training does not work very well here! I will check and correct this in further commits and just leave it in this place. BTW, any PR will be welcomed.
 He's keras [repo](https://github.com/hexiangnan/neural_collaborative_filtering):
-Models | MovieLens | Pinterest
------- | --------- | ---------
-       | HR@10 | NDCG@10 | HR@10 | NDCG@10
-MLP    | 0.692 | 0.425   | 0.868 | 0.542
-GMF    |   -   |   -     |   -   |   -
+
+Models | MovieLens HR@10 | MovieLens NDCG@10 | Pinterest HR@10 | Pinterest NDCG@10
+------ | --------------- | ----------------- | --------------- | -----------------
+MLP    | 0.692 | 0.425 | 0.868 | 0.542
+GMF    | - | - | - | -
 NeuMF (without pre-training) | 0.701 | 0.425 | 0.870 | 0.549
 NeuMF (with pre-training)	 | 0.726 | 0.445 | 0.879 | 0.555
 
+
 This pytorch code:
+
+Models | MovieLens HR@10 | MovieLens NDCG@10 | Pinterest HR@10 | Pinterest NDCG@10
+------ | --------------- | ----------------- | --------------- | -----------------
+MLP    | 0.688 | 0.416 | 0.864 | 0.541
+GMF    | 0.706 | 0.433 | 0.864 | 0.548
+NeuMF (without pre-training) | 0.699 | 0.421 | 0.863 | 0.544
+NeuMF (with pre-training)	 | 0.698 | 0.427 | 0.857 | 0.544
 
 
 ## The requirements are as follows:

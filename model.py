@@ -22,13 +22,15 @@ class NCF(nn.Module):
 		self.MLP_model = MLP_model
 
 		self.embed_user_GMF = nn.Embedding(user_num, factor_num)
-		self.embed_user_MLP = nn.Embedding(user_num, factor_num*4)
 		self.embed_item_GMF = nn.Embedding(item_num, factor_num)
-		self.embed_item_MLP = nn.Embedding(item_num, factor_num*4)
+		self.embed_user_MLP = nn.Embedding(
+				user_num, factor_num * (2 ** (num_layers - 1)))
+		self.embed_item_MLP = nn.Embedding(
+				item_num, factor_num * (2 ** (num_layers - 1)))
 
 		MLP_modules = []
 		for i in range(num_layers):
-			input_size = factor_num * (num_layers - i + 1)
+			input_size = factor_num * (2 **(num_layers - i))
 			MLP_modules.append(nn.Dropout(p=self.dropout))
 			MLP_modules.append(nn.Linear(input_size, input_size//2))
 			MLP_modules.append(nn.ReLU())
@@ -58,7 +60,6 @@ class NCF(nn.Module):
 					nn.init.xavier_uniform_(m.weight)
 			nn.init.kaiming_uniform_(self.predict_layer.weight, 
 									a=1, nonlinearity='sigmoid')
-			# nn.init.xavier_uniform_(self.predict_layer.weight)
 		else:
 			# embedding layers
 			self.embed_user_GMF.weight.data.copy_(
@@ -75,6 +76,7 @@ class NCF(nn.Module):
 				self.MLP_layers, self.MLP_model.MLP_layers):
 				if isinstance(m1, nn.Linear) and isinstance(m2, nn.Linear):
 					m1.weight.data.copy_(m2.weight)
+					m1.bias.data.copy_(m2.bias)
 
 			# predict layers
 			predict_weight = torch.cat([
