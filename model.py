@@ -43,9 +43,6 @@ class NCF(nn.Module):
 			predict_size = factor_num * 2
 		self.predict_layer = nn.Linear(predict_size, 1)
 		
-		for m in self.modules():
-			if isinstance(m, nn.Linear) and m.bias is not None:
-				m.bias.data.zero_()
 		self._init_weight_()
 
 	def _init_weight_(self):
@@ -61,6 +58,10 @@ class NCF(nn.Module):
 					nn.init.xavier_uniform_(m.weight)
 			nn.init.kaiming_uniform_(self.predict_layer.weight, 
 									a=1, nonlinearity='sigmoid')
+
+			for m in self.modules():
+				if isinstance(m, nn.Linear) and m.bias is not None:
+					m.bias.data.zero_()
 		else:
 			# embedding layers
 			self.embed_user_GMF.weight.data.copy_(

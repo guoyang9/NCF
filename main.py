@@ -103,7 +103,7 @@ else:
 # writer = SummaryWriter() # for visualization
 
 ########################### TRAINING #####################################
-count = 0
+count, best_hr = 0, 0
 for epoch in range(args.epochs):
 	model.train() # Enable dropout (if have).
 	start_time = time.time()
@@ -126,13 +126,17 @@ for epoch in range(args.epochs):
 	HR, NDCG = evaluate.metrics(model, test_loader, args.top_k)
 
 	elapsed_time = time.time() - start_time
-	print("The time elapse of epoch: {:03d}".format(epoch) + " is: " + 
+	print("The time elapse of epoch {:03d}".format(epoch) + " is: " + 
 			time.strftime("%H: %M: %S", time.gmtime(elapsed_time)))
-	print("Hit ratio is {:.3f}\tNdcg is {:.3f}".format(
-			np.mean(HR), np.mean(NDCG)))
+	print("HR: {:.3f}\tNDCG: {:.3f}".format(np.mean(HR), np.mean(NDCG)))
 
-if args.out:
-	if not os.path.exists(config.model_path):
-		os.mkdir(config.model_path)
-	torch.save(
-		model, '{}{}.pth'.format(config.model_path, config.model))
+	if HR > best_hr:
+		best_hr, best_ndcg, best_epoch = HR, NDCG, epoch
+		if args.out:
+			if not os.path.exists(config.model_path):
+				os.mkdir(config.model_path)
+			torch.save(model, 
+				'{}{}.pt'.format(config.model_path, config.model))
+
+print("End. Best epoch {:03d}: HR = {:.3f}, \
+	NDCG = {:.3f}".format(best_epoch, best_hr, best_ndcg))
