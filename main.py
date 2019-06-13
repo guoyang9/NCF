@@ -136,7 +136,7 @@ for epoch in range(args.epochs):
 			if not os.path.exists(config.model_path):
 				os.mkdir(config.model_path)
 			torch.save(model, 
-				'{}{}.pt'.format(config.model_path, config.model))
+				'{}{}.pth'.format(config.model_path, config.model))
 
-print("End. Best epoch {:03d}: HR = {:.3f}, \
-	NDCG = {:.3f}".format(best_epoch, best_hr, best_ndcg))
+print("End. Best epoch {:03d}: HR = {:.3f}, NDCG = {:.3f}".format(
+									best_epoch, best_hr, best_ndcg))

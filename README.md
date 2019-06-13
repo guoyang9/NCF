@@ -3,7 +3,7 @@
 
 Note that I use the two sub datasets provided by Xiangnan's [repo](https://github.com/hexiangnan/neural_collaborative_filtering/tree/master/Data).
 
-I utilized a factor number **32**, MLP layers **3**, epochs is **20**, and posted the results in the original paper and this implementation here. There is one thing weird that the pre-training does not work very well here! I will check and correct this in further commits and just leave it in this place. BTW, any PR will be welcomed.
+I randomly utilized a factor number **32**, MLP layers **3**, epochs is **20**, and posted the results in the original paper and this implementation here. There is one thing weird that the pre-training does not work very well here! I will check and correct this in further commits and just leave it in this place. BTW, any PR will be welcomed.
 He's keras [repo](https://github.com/hexiangnan/neural_collaborative_filtering):
 
 Models | MovieLens HR@10 | MovieLens NDCG@10 | Pinterest HR@10 | Pinterest NDCG@10
@@ -25,19 +25,14 @@ NeuMF (with pre-training)	 | 0.698 | 0.427 | 0.857 | 0.544
 
 
 ## The requirements are as follows:
-* python==3.6
-
-* pandas==0.24.2
-
-* numpy==1.16.2
-
-* pytorch==1.0.1
-
-* gensim==3.7.1
-
-* tensorboardX==1.6 (mainly useful when you want to visulize the loss, see https://github.com/lanpa/tensorboard-pytorch)
+	* python==3.6
+	* pandas==0.24.2
+	* numpy==1.16.2
+	* pytorch==1.0.1
+	* gensim==3.7.1
+	* tensorboardX==1.6 (mainly useful when you want to visulize the loss, see https://github.com/lanpa/tensorboard-pytorch)
 
 ## Example to run:
 ```
-python main.py --batch_size=256 --lr=0.001 --embed_size=16
+python main.py --batch_size=256 --lr=0.001 --factor_num=16
 ```
