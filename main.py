@@ -54,7 +54,6 @@ parser.add_argument("--test_num_ng",
 	default=99, 
 	help="sample part of negative items for testing")
 parser.add_argument("--out", 
-	action='store_false', 
 	default=True,
 	help="save model or not")
 parser.add_argument("--gpu", 

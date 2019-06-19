@@ -42,7 +42,7 @@ class NCF(nn.Module):
 		else:
 			predict_size = factor_num * 2
 		self.predict_layer = nn.Linear(predict_size, 1)
-		
+
 		self._init_weight_()
 
 	def _init_weight_(self):
