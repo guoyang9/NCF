@@ -62,10 +62,8 @@ parser.add_argument("--gpu",
 	help="gpu card ID")
 args = parser.parse_args()
 
-os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
-cudnn.benchmark = True
 
-
+def main(argv=None):
 ############################## PREPARE DATASET ##########################
 train_data, test_data, user_num ,item_num, train_mat = data_utils.load_all()
 
@@ -137,5 +135,9 @@ for epoch in range(args.epochs):
 			torch.save(model, 
 				'{}{}.pth'.format(config.model_path, config.model))
 
-print("End. Best epoch {:03d}: HR = {:.3f}, NDCG = {:.3f}".format(
-									best_epoch, best_hr, best_ndcg))
+print("End. Best epoch {:03d}: HR = {:.3f}, NDCG = {:.3f}".format(best_epoch, best_hr, best_ndcg))
+
+
+if __name__=='__main__':
+    args = parse_args()
+    sys.exit(main())
