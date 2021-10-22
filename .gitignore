@@ -1,0 +1,24 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints
+.idea
+
+*.pyc
+*.pyo
+
+nohup.out
+.DS_Store
+*.npy
+*.pkl
+*.ipynb
+*.csv
+*.tar
+*.png
+*.log
+*.txt
+*.json
+
+!requirements.txt
+!params.json
