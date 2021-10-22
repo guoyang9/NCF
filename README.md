@@ -1,5 +1,7 @@
 # NCF
 ### A pytorch GPU implementation of He et al. "Neural Collaborative Filtering" at WWW'17
+### Forked repository from guoyang9/NCF
+
 
 Note that I use the two sub datasets provided by Xiangnan's [repo](https://github.com/hexiangnan/neural_collaborative_filtering/tree/master/Data).
 
