@@ -117,6 +117,6 @@ def model_list():
     """
     List all available models found under ./model.
     """
-    files = os.listdir('./model')
+    files = os.listdir('./models')
     files = [name.replace('.py', '') for name in files if name.endswith('.py')]
     return files
