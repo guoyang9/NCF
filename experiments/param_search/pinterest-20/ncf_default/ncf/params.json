@@ -1,0 +1,9 @@
+{
+  "lr": 1e-3,
+  "dropout": 0.0,
+  "batch_size": 256,
+  "epochs": 20,
+  "num_layers": 3,
+  "num_ng": 4,
+  "factor_num": 32
+}

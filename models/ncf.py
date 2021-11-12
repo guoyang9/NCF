@@ -17,12 +17,15 @@ def train(params, evaluate_metrics, train_loader, test_loader):
     if torch.cuda.is_available():
         GMF_model.cuda()
         MLP_model.cuda()
+    logger.info('Pretraining GMF only...')
     train_single_model(GMF_model, params, evaluate_metrics, train_loader, test_loader, 'GMF')
+    logger.info('Pretraining MLP only...')
     train_single_model(MLP_model, params, evaluate_metrics, train_loader, test_loader, 'MLP')
 
     combined_model = Net(params, model='NeuMF-pre', GMF_model=GMF_model, MLP_model=MLP_model)
     if torch.cuda.is_available():
         combined_model.cuda()
+    logger.info('Training combined model...')
     train_single_model(combined_model, params, evaluate_metrics, train_loader, test_loader, 'NeuMF-pre')
     return combined_model
 
@@ -60,7 +63,7 @@ def train_single_model(model, params, evaluate_metrics, train_loader, test_loade
         writer.add_scalars(f'{model_name}/accuracy', {'HR': np.mean(HR),
                                                       'NDCG': np.mean(NDCG)}, epoch)
 
-        logger.info(f"Epoch {epoch} - HR: {np.mean(HR):.3f}\tNDCG: {np.mean(NDCG):.3f}")
+        logger.info(f'Epoch {epoch} - HR: {np.mean(HR):.3f}\tNDCG: {np.mean(NDCG):.3f}')
 
         if HR > best_hr:
             best_hr, best_ndcg, best_epoch = HR, NDCG, epoch

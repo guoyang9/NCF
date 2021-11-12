@@ -43,7 +43,7 @@ if __name__ == '__main__':
     params.update(json_path)
 
     utils.set_logger(os.path.join(params.model_dir, 'train.log'))
-    logger = logging.getLogger(f'RMD.{args.model}')
+    logger = logging.getLogger(f'RMD.main')
 
     params.dataset = args.dataset
     params.model = args.model

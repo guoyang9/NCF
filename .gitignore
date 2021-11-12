@@ -19,6 +19,7 @@ nohup.out
 *.log
 *.txt
 *.json
+events*
 
 !requirements.txt
 !params.json
