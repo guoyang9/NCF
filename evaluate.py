@@ -19,6 +19,7 @@ def metrics(model, test_loader, top_k):
 	HR, NDCG = [], []
 
 	for user, item, label in test_loader:
+		print('METRICS: ')
 		print('user: ', user.shape)
 		print(user)
 		print('item: ', item.shape)
