@@ -38,3 +38,21 @@ NeuMF (with pre-training)	 | 0.720 | 0.439 | 0.879 | 0.555
 ```
 python main.py --batch_size=256 --lr=0.001 --factor_num=16
 ```
+
+## Dataset info
+From the official repo: https://github.com/hexiangnan/neural_collaborative_filtering
+
+We provide two processed datasets: MovieLens 1 Million (ml-1m) and Pinterest (pinterest-20). 
+
+train.rating: 
+- Train file.
+- Each Line is a training instance: userID\t itemID\t rating\t timestamp (if have)
+
+test.rating:
+- Test file (positive instances). 
+- Each Line is a testing instance: userID\t itemID\t rating\t timestamp (if have)
+
+test.negative
+- Test file (negative instances).
+- Each line corresponds to the line of test.rating, containing 99 negative samples.  
+- Each line is in the format: (userID,itemID)\t negativeItemID1\t negativeItemID2 ...

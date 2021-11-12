@@ -7,7 +7,7 @@ import torch.utils.data as data
 import config
 
 
-def load_all(test_num=100):
+def load_all():
     """ We load all the three file here to save time in each epoch. """
     train_data = pd.read_csv(
         config.train_rating,
@@ -28,7 +28,7 @@ def load_all(test_num=100):
     test_data = []
     with open(config.test_negative, 'r') as fd:
         line = fd.readline()
-        while line != None and line != '':
+        while line is not None and line != '':
             arr = line.split('\t')
             u = eval(arr[0])[0]
             test_data.append([u, eval(arr[0])[1]])
