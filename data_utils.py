@@ -16,6 +16,7 @@ def load_all():
 
     print('train_data: ', train_data)
     user_num = train_data['user'].max() + 1
+    print('user_num: ', user_num)
     item_num = train_data['item'].max() + 1
 
     train_data = train_data.values.tolist()
@@ -31,6 +32,7 @@ def load_all():
         while line is not None and line != '':
             arr = line.split('\t')
             u = eval(arr[0])[0]
+            print(f'u: {u}, arr[0]: {arr[0]}, eval: {eval(arr[0])[1]}')
             test_data.append([u, eval(arr[0])[1]])
             for i in arr[1:]:
                 test_data.append([u, int(i)])
