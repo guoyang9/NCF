@@ -67,9 +67,9 @@ if __name__ == '__main__':
     train_data, test_data, params.user_num, params.item_num, train_mat = data_loader.load_all(params)
 
     # construct the train and test datasets
-    train_dataset = data_loader.TrainSet(featues=train_data, num_item=params.item_num, train_mat=train_mat,
+    train_dataset = data_loader.TrainSet(features=train_data, num_item=params.item_num, train_mat=train_mat,
                                          num_ng=params.num_ng)
-    test_dataset = data_loader.TestSet(featues=test_data, num_item=params.item_num, num_ng=0)
+    test_dataset = data_loader.TestSet(features=test_data, num_item=params.item_num, num_ng=0)
     train_loader = data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=4)
     test_loader = data.DataLoader(test_dataset, batch_size=args.test_num_ng + 1, shuffle=False, num_workers=0)
 
