@@ -19,6 +19,12 @@ def metrics(model, test_loader, top_k):
 	HR, NDCG = [], []
 
 	for user, item, label in test_loader:
+		print('user: ', user.shape)
+		print(user)
+		print('item: ', item.shape)
+		print(item)
+		print('label: ', label.shape)
+		print(label)
 		user = user.cuda()
 		item = item.cuda()
 
