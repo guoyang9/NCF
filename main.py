@@ -64,7 +64,7 @@ if __name__ == '__main__':
         pass
 
     print('Building the datasets...')
-    train_data, test_data, params.user_num, params.item_num, train_mat = data_loader.load_all()
+    train_data, test_data, params.user_num, params.item_num, train_mat = data_loader.load_all(params)
 
     # construct the train and test datasets
     train_dataset = data_loader.TrainSet(featues=train_data, num_item=params.item_num, train_mat=train_mat,
