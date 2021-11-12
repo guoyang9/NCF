@@ -1,25 +1,94 @@
+import numpy as np
+import os
 import torch
 import torch.nn as nn
+import torch.optim as optim
+import logging
+from tqdm import trange
+from torch.utils.tensorboard import SummaryWriter
+from datetime import datetime
+
+logger = logging.getLogger('RMD.ncf')
 
 
-class NCF(nn.Module):
-    def __init__(self, user_num, item_num, factor_num, num_layers,
-                 dropout, model, GMF_model=None, MLP_model=None):
-        super(NCF, self).__init__()
+def train(params, evaluate_metrics, train_loader, test_loader):
+    GMF_model = Net(params, model='GMF')
+    MLP_model = Net(params, model='MLP')
+    if torch.cuda.is_available():
+        GMF_model.cuda()
+        MLP_model.cuda()
+    train_single_model(GMF_model, params, evaluate_metrics, train_loader, test_loader, 'GMF')
+    train_single_model(MLP_model, params, evaluate_metrics, train_loader, test_loader, 'MLP')
+
+    combined_model = Net(params, model='NeuMF-pre', GMF_model=GMF_model, MLP_model=MLP_model)
+    if torch.cuda.is_available():
+        combined_model.cuda()
+    train_single_model(combined_model, params, evaluate_metrics, train_loader, test_loader, 'NeuMF-pre')
+    return combined_model
+
+
+def train_single_model(model, params, evaluate_metrics, train_loader, test_loader, model_name):
+    loss_fn = nn.BCEWithLogitsLoss()
+
+    if model_name == 'NeuMF-pre':
+        optimizer = optim.SGD(model.parameters(), lr=params.lr)
+    else:
+        optimizer = optim.Adam(model.parameters(), lr=params.lr)
+
+    writer = SummaryWriter(log_dir=os.path.join(params.plot_dir, datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+    count, best_hr, best_epoch, best_ndcg = 0, 0, -1, 0
+
+    for epoch in trange(params.epochs):
+        model.train()
+        train_loader.dataset.ng_sample()
+
+        for user, item, label in train_loader:
+            user = user.to(params.device)
+            item = item.to(params.device)
+            label = label.float().to(params.device)
+
+            model.zero_grad()
+            prediction = model(user, item)
+            loss = loss_fn(prediction, label)
+            loss.backward()
+            optimizer.step()
+            writer.add_scalar(f'{model_name}/loss', loss.item(), count)
+            count += 1
+
+        model.eval()
+        HR, NDCG = evaluate_metrics(model, test_loader, params.top_k, params.device)
+        writer.add_scalars(f'{model_name}/accuracy', {'HR': np.mean(HR),
+                                                      'NDCG': np.mean(NDCG)}, epoch)
+
+        logger.info(f"Epoch {epoch} - HR: {np.mean(HR):.3f}\tNDCG: {np.mean(NDCG):.3f}")
+
+        if HR > best_hr:
+            best_hr, best_ndcg, best_epoch = HR, NDCG, epoch
+            torch.save(model, os.path.join(params.model_dir, f'{model_name}_best.pth'))
+        torch.save(model, os.path.join(params.model_dir, f'{model_name}_epoch_{epoch}.pth'))
+
+    writer.close()
+    logger.info(f"End training. Best epoch {best_epoch:03d}: HR = {best_hr:.3f}, NDCG = {best_ndcg:.3f}")
+
+
+class Net(nn.Module):
+    def __init__(self, params, model, GMF_model=None, MLP_model=None):
         """
-		user_num: number of users;
-		item_num: number of items;
-		factor_num: number of predictive factors;
-		num_layers: the number of layers in MLP model;
-		dropout: dropout rate between fully connected layers;
-		model: 'MLP', 'GMF', 'NeuMF-end', and 'NeuMF-pre';
-		GMF_model: pre-trained GMF weights;
-		MLP_model: pre-trained MLP weights.
+		Args:
+		    paams: dictionary of all parameters
+            model: 'MLP', 'GMF', 'NeuMF-end', and 'NeuMF-pre'
+            GMF_model: pre-trained GMF weights
+            MLP_model: pre-trained MLP weights
 		"""
-        self.dropout = dropout
+        super(Net, self).__init__()
+        self.dropout = params.dropout
         self.model = model
         self.GMF_model = GMF_model
         self.MLP_model = MLP_model
+        factor_num = params.factor_num
+        num_layers = params.num_layers
+        user_num = params.user_num
+        item_num = params.item_num
 
         self.embed_user_GMF = nn.Embedding(user_num, factor_num)
         self.embed_item_GMF = nn.Embedding(item_num, factor_num)

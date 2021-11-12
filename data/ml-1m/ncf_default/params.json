@@ -1,0 +1,7 @@
+{
+  "data_dir": "raw_data/ml-1m",
+  "train_rating": "ml-1m.train.rating",
+  "test_negative": "ml-1m.test.negative",
+  "test_num_ng": 99,
+  "top_k": 10
+}

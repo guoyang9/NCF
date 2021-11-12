@@ -2,6 +2,7 @@ import os
 import json
 import sys
 import tqdm
+import logging
 
 
 class Params:
@@ -67,7 +68,7 @@ def set_logger(log_path):
     Args:
         log_path: (string) where to log
     """
-    _logger = logging.getLogger('TS')
+    _logger = logging.getLogger('RMD')
     _logger.setLevel(logging.INFO)
 
     fmt = logging.Formatter('[%(asctime)s] %(name)s: %(message)s', '%m/%d %H:%M:%S')
@@ -86,8 +87,6 @@ def set_logger(log_path):
     file_handler.setFormatter(fmt)
     _logger.addHandler(file_handler)
     _logger.addHandler(TqdmHandler(fmt))
-    # handler = logging.StreamHandler(stream=sys.stdout)
-    # _logger.addHandler(handler)
 
     # https://stackoverflow.com/questions/6234405/logging-uncaught-exceptions-in-python?noredirect=1&lq=1
     def handle_exception(exc_type, exc_value, exc_traceback):
@@ -112,3 +111,12 @@ def save_dict_to_json(d, json_path):
         # We need to convert the values to float for json (it doesn't accept np.array, np.float, )
         d = {k: float(v) for k, v in d.items()}
         json.dump(d, f, indent=4)
+
+
+def model_list():
+    """
+    List all available models found under ./model.
+    """
+    files = os.listdir('./model')
+    files = [name.replace('.py', '') for name in files if name.endswith('.py')]
+    return files

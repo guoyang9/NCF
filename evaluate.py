@@ -15,22 +15,14 @@ def ndcg(gt_item, pred_items):
 	return 0
 
 
-def metrics(model, test_loader, top_k):
+def metrics(model, test_loader, top_k, device):
 	HR, NDCG = [], []
 
-	for user, item, label in test_loader:
-		print('METRICS: ')
-		print('user: ', user.shape)
-		print(user)
-		print('item: ', item.shape)
-		print(item)
-		print('label: ', label.shape)
-		print(label)
-		user = user.cuda()
-		item = item.cuda()
+	for user, item in test_loader:
+		user = user.to(device)
+		item = item.to(device)
 
 		predictions = model(user, item)
-		print('predictions: ', predictions.shape)
 		_, indices = torch.topk(predictions, top_k)
 		recommends = torch.take(
 				item, indices).cpu().numpy().tolist()

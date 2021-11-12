@@ -1,7 +1,7 @@
 # NCF
 ### A pytorch GPU implementation of He et al. "Neural Collaborative Filtering" at WWW'17
-### Forked repository from guoyang9/NCF
-
+- Forked repository from guoyang9/NCF.
+- Updated coding style and experiment settings by zhykoties.
 
 Note that I use the two sub datasets provided by Xiangnan's [repo](https://github.com/hexiangnan/neural_collaborative_filtering/tree/master/Data).
 
@@ -32,11 +32,10 @@ NeuMF (with pre-training)	 | 0.720 | 0.439 | 0.879 | 0.555
 	* numpy==1.16.2
 	* pytorch==1.0.1
 	* gensim==3.7.1
-	* tensorboardX==1.6 (mainly useful when you want to visulize the loss, see https://github.com/lanpa/tensorboard-pytorch)
 
 ## Example to run:
 ```
-python main.py --batch_size=256 --lr=0.001 --factor_num=16
+python main.py --dataset=ml-1m --model=ncf
 ```
 
 ## Dataset info

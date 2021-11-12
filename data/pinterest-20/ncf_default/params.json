@@ -1,0 +1,5 @@
+{
+  "data_dir": "raw_data/pinterest-20",
+  "train_rating": "pinterest-20.train.rating,",
+  "test_negative": "pinterest-20.test.negative"
+}

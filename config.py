@@ -1,6 +1,6 @@
 # dataset name 
 dataset = 'ml-1m'
-assert dataset in ['ml-1m', 'pinterest-20']
+assert dataset in ['ml-1m', 'pinterest-20-20']
 
 # model name 
 model = 'NeuMF-end'
