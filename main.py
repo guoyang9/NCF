@@ -20,6 +20,7 @@ if __name__ == '__main__':
     parser.add_argument('--model-dir', default='base_model',
                         help='Directory containing params.json, and training results')
     parser.add_argument('--param-set', default=None, help='Set of model parameters created for hypersearch')
+    parser.add_argument('--log-output', action='store_true', help='Whether to save the run logs using tensorboard')
     parser.add_argument('--fix-seed', action='store_true', help='Whether to fix random seed')
     parser.add_argument('--save-best', action='store_true', help='Whether to save best ND to param_search.txt')
     parser.add_argument('--restore-file', default=None,
@@ -91,4 +92,5 @@ if __name__ == '__main__':
         params.device = torch.device('cpu')
         logger.info('Not using cuda...')
 
+    params.log_output = args.log_output
     final_model = net.train(params, evaluate.metrics, train_loader, test_loader)

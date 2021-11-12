@@ -38,7 +38,8 @@ def train_single_model(model, params, evaluate_metrics, train_loader, test_loade
     else:
         optimizer = optim.Adam(model.parameters(), lr=params.lr)
 
-    writer = SummaryWriter(log_dir=os.path.join(params.plot_dir, datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+    if params.log_output:
+        writer = SummaryWriter(log_dir=os.path.join(params.plot_dir, datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
     count, best_hr, best_epoch, best_ndcg = 0, 0, -1, 0
 
     for epoch in trange(params.epochs):
@@ -55,13 +56,15 @@ def train_single_model(model, params, evaluate_metrics, train_loader, test_loade
             loss = loss_fn(prediction, label)
             loss.backward()
             optimizer.step()
-            writer.add_scalar(f'{model_name}/loss', loss.item(), count)
+            if params.log_output:
+                writer.add_scalar(f'{model_name}/loss', loss.item(), count)
             count += 1
 
         model.eval()
         HR, NDCG = evaluate_metrics(model, test_loader, params.top_k, params.device)
-        writer.add_scalars(f'{model_name}/accuracy', {'HR': np.mean(HR),
-                                                      'NDCG': np.mean(NDCG)}, epoch)
+        if params.log_output:
+            writer.add_scalars(f'{model_name}/accuracy', {'HR': np.mean(HR),
+                                                          'NDCG': np.mean(NDCG)}, epoch)
 
         logger.info(f'Epoch {epoch} - HR: {np.mean(HR):.3f}\tNDCG: {np.mean(NDCG):.3f}')
 
@@ -70,7 +73,8 @@ def train_single_model(model, params, evaluate_metrics, train_loader, test_loade
             torch.save(model, os.path.join(params.model_dir, f'{model_name}_best.pth'))
         torch.save(model, os.path.join(params.model_dir, f'{model_name}_epoch_{epoch}.pth'))
 
-    writer.close()
+    if params.log_output:
+        writer.close()
     logger.info(f"End training. Best epoch {best_epoch:03d}: HR = {best_hr:.3f}, NDCG = {best_ndcg:.3f}")
 
 
