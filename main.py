@@ -101,6 +101,7 @@ if __name__ == '__main__':
         start_time = time.time()
         train_loader.dataset.ng_sample()
 
+        HR, NDCG = evaluate.metrics(model, test_loader, args.top_k)
         for user, item, label in train_loader:
             user = user.cuda()
             item = item.cuda()
