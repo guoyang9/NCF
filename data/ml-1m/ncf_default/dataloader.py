@@ -13,8 +13,8 @@ def load_all(params):
         sep='\t', header=None, names=['user', 'item'],
         usecols=[0, 1], dtype={0: np.int32, 1: np.int32})
 
-    user_num = train_data['user'].nunique()
-    item_num = train_data['item'].nunique()
+    user_num = train_data['user'].max() + 1
+    item_num = train_data['item'].max() + 1
 
     train_data = train_data.values.tolist()
 

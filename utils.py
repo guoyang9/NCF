@@ -81,7 +81,7 @@ def set_logger(log_path):
 
         def emit(self, record):
             msg = self.format(record)
-            tqdm.write(msg)
+            tqdm.tqdm.write(msg)
 
     file_handler = logging.FileHandler(log_path)
     file_handler.setFormatter(fmt)
