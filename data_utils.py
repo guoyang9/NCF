@@ -32,7 +32,7 @@ def load_all():
         while line is not None and line != '':
             arr = line.split('\t')
             u = eval(arr[0])[0]
-            print(f'u: {u}, arr[0]: {arr[0]}, eval: {eval(arr[0])[1]}')
+            print(f'u: {u}, arr[0]: {arr[0]}, eval: {eval(arr[0])[1]}, len: {len(arr)}')
             test_data.append([u, eval(arr[0])[1]])
             for i in arr[1:]:
                 test_data.append([u, int(i)])
