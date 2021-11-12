@@ -21,15 +21,16 @@ def metrics(model, test_loader, top_k):
 	for user, item, label in test_loader:
 		print('METRICS: ')
 		print('user: ', user.shape)
-		print(user)
+		# print(user)
 		print('item: ', item.shape)
-		print(item)
+		# print(item)
 		print('label: ', label.shape)
-		print(label)
+		# print(label)
 		user = user.cuda()
 		item = item.cuda()
 
 		predictions = model(user, item)
+		print('predictions: ', predictions.shape)
 		_, indices = torch.topk(predictions, top_k)
 		recommends = torch.take(
 				item, indices).cpu().numpy().tolist()

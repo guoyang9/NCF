@@ -76,13 +76,6 @@ for epoch in trange(args.epochs):
     train_loader.dataset.ng_sample()
 
     for user, item, label in train_loader:
-        print('train')
-        print('user: ', user.shape)
-        print(user)
-        print('item: ', item.shape)
-        print(item)
-        print('label: ', label.shape)
-        print(label)
         user = user.cuda()
         item = item.cuda()
         label = label.float().cuda()
