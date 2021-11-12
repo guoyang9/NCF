@@ -54,7 +54,7 @@ if __name__ == '__main__':
     else:
         params.plot_title = os.path.join(args.model_dir, args.dataset, args.dataloader, args.model)
 
-    net = importlib.import_module(f'model.{args.model}')
+    net = importlib.import_module(f'models.{args.model}')
     data_loader = importlib.import_module(f'data.{args.dataset}.{args.dataloader}.dataloader')
 
     # create missing directories
